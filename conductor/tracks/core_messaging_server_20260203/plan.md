@@ -12,10 +12,10 @@
     - [x] Add `nhooyr.io/websocket` dependency.
     - [x] Create a `/ws` endpoint that upgrades connections.
     - [x] Write tests for connection upgrading.
-- [ ] Task: Implement in-memory connection registry.
-    - [ ] Define a `Hub` or `Server` struct to manage active connections.
-    - [ ] Use `sync.RWMutex` to protect the connection map.
-    - [ ] Write unit tests for registering and unregistering connections.
+- [x] Task: Implement in-memory connection registry. (4f3ed31)
+    - [x] Define a `Hub` or `Server` struct to manage active connections.
+    - [x] Use `sync.RWMutex` to protect the connection map.
+    - [x] Write unit tests for registering and unregistering connections.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: WebSocket Integration & Connection Management' (Protocol in workflow.md)
 
 ## Phase 3: Messaging Logic & Broadcasting
