@@ -8,10 +8,10 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Initialization & Basic Server' (Protocol in workflow.md)
 
 ## Phase 2: WebSocket Integration & Connection Management
-- [ ] Task: Implement WebSocket upgrade and basic connection handling.
-    - [ ] Add `nhooyr.io/websocket` dependency.
-    - [ ] Create a `/ws` endpoint that upgrades connections.
-    - [ ] Write tests for connection upgrading.
+- [x] Task: Implement WebSocket upgrade and basic connection handling. (2310620)
+    - [x] Add `nhooyr.io/websocket` dependency.
+    - [x] Create a `/ws` endpoint that upgrades connections.
+    - [x] Write tests for connection upgrading.
 - [ ] Task: Implement in-memory connection registry.
     - [ ] Define a `Hub` or `Server` struct to manage active connections.
     - [ ] Use `sync.RWMutex` to protect the connection map.
