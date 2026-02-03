@@ -1,6 +1,6 @@
 # Implementation Plan: Core WebSocket Messaging Server
 
-## Phase 1: Project Initialization & Basic Server
+## Phase 1: Project Initialization & Basic Server [checkpoint: 55a23c2]
 - [x] Task: Initialize Go module and setup basic HTTP server structure. (72683a7)
     - [x] Run `go mod init whatsapp-clone`.
     - [x] Create `main.go` with a simple "Hello World" HTTP handler.
