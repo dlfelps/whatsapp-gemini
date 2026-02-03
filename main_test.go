@@ -7,7 +7,8 @@ import (
 )
 
 func TestHelloHandler(t *testing.T) {
-	mux := SetupRouter()
+	server := &Server{hub: NewHub()}
+	mux := SetupRouter(server)
 	req, err := http.NewRequest("GET", "/", nil)
 	if err != nil {
 		t.Fatal(err)

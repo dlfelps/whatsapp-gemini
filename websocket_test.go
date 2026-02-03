@@ -10,11 +10,12 @@ import (
 )
 
 func TestWebSocketUpgrade(t *testing.T) {
-	mux := SetupRouter()
+	s := &Server{hub: NewHub()}
+	mux := SetupRouter(s)
 	server := httptest.NewServer(mux)
 	defer server.Close()
 
-	wsURL := strings.Replace(server.URL, "http", "ws", 1) + "/ws"
+	wsURL := strings.Replace(server.URL, "http", "ws", 1) + "/ws?user=testuser"
 
 	ctx := context.Background()
 	c, _, err := websocket.Dial(ctx, wsURL, nil)
