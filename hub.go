@@ -10,6 +10,12 @@ type connection struct {
 	ws *websocket.Conn
 }
 
+type Message struct {
+	Sender    string `json:"sender"`
+	Recipient string `json:"recipient"`
+	Content   string `json:"content"`
+}
+
 type Hub struct {
 	mu      sync.RWMutex
 	clients map[string]*connection
