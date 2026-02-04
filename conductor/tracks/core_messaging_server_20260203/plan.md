@@ -27,8 +27,8 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Messaging Logic & Broadcasting' (Protocol in workflow.md)
 
 ## Phase 4: CLI Client Implementation
-- [ ] Task: Build a basic CLI client to interact with the server.
-    - [ ] Implement dial logic to connect to `ws://localhost:8080/ws`.
-    - [ ] Use separate Goroutines for reading from stdin and reading from the WebSocket.
-    - [ ] Format and display messages in the terminal.
+- [x] Task: Build a basic CLI client to interact with the server. (42ca071)
+    - [x] Implement dial logic to connect to `ws://localhost:8080/ws`.
+    - [x] Use separate Goroutines for reading from stdin and reading from the WebSocket.
+    - [x] Format and display messages in the terminal.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: CLI Client Implementation' (Protocol in workflow.md)
