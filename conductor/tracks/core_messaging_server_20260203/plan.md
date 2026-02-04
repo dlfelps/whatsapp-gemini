@@ -18,7 +18,7 @@
     - [x] Write unit tests for registering and unregistering connections.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: WebSocket Integration & Connection Management' (Protocol in workflow.md)
 
-## Phase 3: Messaging Logic & Broadcasting
+## Phase 3: Messaging Logic & Broadcasting [checkpoint: 47d4e8d]
 - [x] Task: Define the messaging protocol and implement message broadcasting. (c4e47e0)
     - [x] Define the `Message` struct with JSON tags.
     - [x] Implement a loop to read messages from WebSocket connections.
