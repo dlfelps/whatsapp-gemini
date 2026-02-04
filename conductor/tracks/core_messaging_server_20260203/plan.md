@@ -19,11 +19,11 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: WebSocket Integration & Connection Management' (Protocol in workflow.md)
 
 ## Phase 3: Messaging Logic & Broadcasting
-- [ ] Task: Define the messaging protocol and implement message broadcasting.
-    - [ ] Define the `Message` struct with JSON tags.
-    - [ ] Implement a loop to read messages from WebSocket connections.
-    - [ ] Implement logic to find the recipient in the registry and send the message.
-    - [ ] Write integration tests for message delivery between two virtual clients.
+- [x] Task: Define the messaging protocol and implement message broadcasting. (c4e47e0)
+    - [x] Define the `Message` struct with JSON tags.
+    - [x] Implement a loop to read messages from WebSocket connections.
+    - [x] Implement logic to find the recipient in the registry and send the message.
+    - [x] Write integration tests for message delivery between two virtual clients.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Messaging Logic & Broadcasting' (Protocol in workflow.md)
 
 ## Phase 4: CLI Client Implementation
