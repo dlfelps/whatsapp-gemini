@@ -7,7 +7,7 @@
     - [x] Write a test to verify the HTTP server responds.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Initialization & Basic Server' (Protocol in workflow.md)
 
-## Phase 2: WebSocket Integration & Connection Management
+## Phase 2: WebSocket Integration & Connection Management [checkpoint: 4b23a53]
 - [x] Task: Implement WebSocket upgrade and basic connection handling. (2310620)
     - [x] Add `nhooyr.io/websocket` dependency.
     - [x] Create a `/ws` endpoint that upgrades connections.
