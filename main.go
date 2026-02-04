@@ -16,17 +16,22 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) wsHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("Received connection request on /ws from %s\n", r.RemoteAddr)
 	userID := r.URL.Query().Get("user")
 	if userID == "" {
+		fmt.Println("Error: user query parameter is missing")
 		http.Error(w, "user query parameter is required", http.StatusBadRequest)
 		return
 	}
 
-	c, err := websocket.Accept(w, r, nil)
+	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{
+		InsecureSkipVerify: true,
+	})
 	if err != nil {
-		fmt.Printf("Error accepting websocket: %v\n", err)
+		fmt.Printf("Error accepting websocket for user %s: %v\n", userID, err)
 		return
 	}
+	fmt.Printf("User %s connected successfully\n", userID)
 	conn := &connection{ws: c}
 	s.hub.register(userID, conn)
 	defer s.hub.unregister(userID)
