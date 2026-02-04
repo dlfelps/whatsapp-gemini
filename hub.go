@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sync"
 
 	"nhooyr.io/websocket"
@@ -31,12 +32,14 @@ func (h *Hub) register(id string, conn *connection) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	h.clients[id] = conn
+	fmt.Printf("Registered client: %s (Total: %d)\n", id, len(h.clients))
 }
 
 func (h *Hub) unregister(id string) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	delete(h.clients, id)
+	fmt.Printf("Unregistered client: %s (Total: %d)\n", id, len(h.clients))
 }
 
 func (h *Hub) get(id string) (*connection, bool) {
