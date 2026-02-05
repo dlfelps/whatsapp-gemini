@@ -26,7 +26,7 @@
     - [x] Write integration tests for message delivery between two virtual clients.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Messaging Logic & Broadcasting' (Protocol in workflow.md)
 
-## Phase 4: CLI Client Implementation
+## Phase 4: CLI Client Implementation [checkpoint: 6beac97]
 - [x] Task: Build a basic CLI client to interact with the server. (42ca071)
     - [x] Implement dial logic to connect to `ws://localhost:8080/ws`.
     - [x] Use separate Goroutines for reading from stdin and reading from the WebSocket.
