@@ -13,9 +13,11 @@ import (
 )
 
 type Message struct {
+	Type      string `json:"type"`
 	Sender    string `json:"sender"`
 	Recipient string `json:"recipient"`
 	Content   string `json:"content"`
+	Room      string `json:"room,omitempty"`
 }
 
 func main() {
@@ -34,7 +36,11 @@ func main() {
 	defer c.Close(websocket.StatusNormalClosure, "")
 
 	fmt.Printf("Connected to server as %s\n", username)
-	fmt.Println("Format: <recipient> <message>")
+	fmt.Println("Commands:")
+	fmt.Println("  <recipient> <message>          - send direct message")
+	fmt.Println("  /create <room>                 - create a chat room")
+	fmt.Println("  /invite <room> <user>          - invite user to a room")
+	fmt.Println("  /room <room> <message>         - send message to a room")
 
 	// Read messages from server in a separate Goroutine
 	go func() {
@@ -49,7 +55,19 @@ func main() {
 				log.Printf("Error decoding message: %v", err)
 				continue
 			}
-			fmt.Printf("\n[%s]: %s\n> ", msg.Sender, msg.Content)
+
+			switch msg.Type {
+			case "room_msg":
+				fmt.Printf("\n[%s][%s]: %s\n> ", msg.Room, msg.Sender, msg.Content)
+			case "room_created", "invite_sent":
+				fmt.Printf("\n[server]: %s\n> ", msg.Content)
+			case "invited":
+				fmt.Printf("\n[server]: %s\n> ", msg.Content)
+			case "error":
+				fmt.Printf("\n[error]: %s\n> ", msg.Content)
+			default:
+				fmt.Printf("\n[%s]: %s\n> ", msg.Sender, msg.Content)
+			}
 		}
 	}()
 
@@ -58,17 +76,64 @@ func main() {
 	fmt.Print("> ")
 	for scanner.Scan() {
 		line := scanner.Text()
-		parts := strings.SplitN(line, " ", 2)
-		if len(parts) < 2 {
-			fmt.Println("Invalid format. Use: <recipient> <message>")
-			fmt.Print("> ")
-			continue
-		}
+		var msg Message
 
-		msg := Message{
-			Sender:    username,
-			Recipient: parts[0],
-			Content:   parts[1],
+		switch {
+		case strings.HasPrefix(line, "/create "):
+			roomName := strings.TrimPrefix(line, "/create ")
+			roomName = strings.TrimSpace(roomName)
+			if roomName == "" {
+				fmt.Println("Usage: /create <room>")
+				fmt.Print("> ")
+				continue
+			}
+			msg = Message{
+				Type:    "create_room",
+				Sender:  username,
+				Content: roomName,
+			}
+
+		case strings.HasPrefix(line, "/invite "):
+			parts := strings.SplitN(strings.TrimPrefix(line, "/invite "), " ", 2)
+			if len(parts) < 2 {
+				fmt.Println("Usage: /invite <room> <user>")
+				fmt.Print("> ")
+				continue
+			}
+			msg = Message{
+				Type:      "invite",
+				Sender:    username,
+				Room:      strings.TrimSpace(parts[0]),
+				Recipient: strings.TrimSpace(parts[1]),
+			}
+
+		case strings.HasPrefix(line, "/room "):
+			parts := strings.SplitN(strings.TrimPrefix(line, "/room "), " ", 2)
+			if len(parts) < 2 {
+				fmt.Println("Usage: /room <room> <message>")
+				fmt.Print("> ")
+				continue
+			}
+			msg = Message{
+				Type:    "room_msg",
+				Sender:  username,
+				Room:    strings.TrimSpace(parts[0]),
+				Content: parts[1],
+			}
+
+		default:
+			// Direct message (original behavior)
+			parts := strings.SplitN(line, " ", 2)
+			if len(parts) < 2 {
+				fmt.Println("Invalid format. Use: <recipient> <message>")
+				fmt.Print("> ")
+				continue
+			}
+			msg = Message{
+				Sender:    username,
+				Recipient: parts[0],
+				Content:   parts[1],
+			}
 		}
 
 		p, err := json.Marshal(msg)
