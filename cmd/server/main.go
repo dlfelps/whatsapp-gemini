@@ -63,18 +63,19 @@ func (s *Server) wsHandler(w http.ResponseWriter, r *http.Request) {
 			s.handleRoomMessage(ctx, userID, msg)
 		default:
 			// Direct message (original behavior, backwards compatible)
-			s.handleDirectMessage(ctx, userID, msg, p)
+			s.handleDirectMessage(ctx, userID, msg, p, c)
 		}
 	}
 }
 
 // handleDirectMessage routes a message to a single recipient (original behavior).
-func (s *Server) handleDirectMessage(ctx context.Context, _ string, msg Message, rawPayload []byte) {
+func (s *Server) handleDirectMessage(ctx context.Context, _ string, msg Message, rawPayload []byte, senderConn *websocket.Conn) {
 	fmt.Printf("Message from %s to %s: %s\n", msg.Sender, msg.Recipient, msg.Content)
 
 	recipientConn, ok := s.hub.get(msg.Recipient)
 	if !ok {
 		fmt.Printf("Recipient %s not found for message from %s\n", msg.Recipient, msg.Sender)
+		sendError(ctx, senderConn, fmt.Sprintf("user %q is not online", msg.Recipient))
 		return
 	}
 

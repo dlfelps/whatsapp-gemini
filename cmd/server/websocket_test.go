@@ -200,6 +200,55 @@ func TestInviteAndRoomMessage(t *testing.T) {
 	}
 }
 
+func TestDirectMessageRecipientNotFound(t *testing.T) {
+	s := &Server{hub: NewHub()}
+	mux := SetupRouter(s)
+	server := httptest.NewServer(mux)
+	defer server.Close()
+
+	wsURL := strings.Replace(server.URL, "http", "ws", 1) + "/ws"
+	ctx := context.Background()
+
+	// Connect Alice (but NOT bob — he is offline)
+	alice, _, err := websocket.Dial(ctx, wsURL+"?user=alice", nil)
+	if err != nil {
+		t.Fatalf("alice failed to dial: %v", err)
+	}
+	defer alice.Close(websocket.StatusNormalClosure, "")
+
+	// Alice sends a direct message to offline user "bob"
+	msg := Message{
+		Sender:    "alice",
+		Recipient: "bob",
+		Content:   "Are you there?",
+	}
+	data, _ := json.Marshal(msg)
+	if err := alice.Write(ctx, websocket.MessageText, data); err != nil {
+		t.Fatalf("alice failed to write: %v", err)
+	}
+
+	// Alice should receive an error indicating bob is not online
+	_, p, err := alice.Read(ctx)
+	if err != nil {
+		t.Fatalf("alice failed to read error response: %v", err)
+	}
+
+	var errMsg Message
+	if err := json.Unmarshal(p, &errMsg); err != nil {
+		t.Fatalf("failed to unmarshal error message: %v", err)
+	}
+
+	if errMsg.Type != "error" {
+		t.Errorf("expected type 'error', got %q", errMsg.Type)
+	}
+	if errMsg.Sender != "server" {
+		t.Errorf("expected sender 'server', got %q", errMsg.Sender)
+	}
+	if !strings.Contains(errMsg.Content, "bob") {
+		t.Errorf("expected error content to mention 'bob', got %q", errMsg.Content)
+	}
+}
+
 func TestRoomMessageNotDeliveredToNonMembers(t *testing.T) {
 	s := &Server{hub: NewHub()}
 	mux := SetupRouter(s)
